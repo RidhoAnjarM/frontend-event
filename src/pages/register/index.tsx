@@ -19,7 +19,7 @@ const Register = () => {
         setLoading(true);
         try {
             await register({ username, password });
-            setModalMessage('Registration successful');
+            setModalMessage('Pendaftaran akun telah berhasil');
             setShowModal(true);
             setTimeout(() => {
                 setShowModal(false);
@@ -111,11 +111,12 @@ const Register = () => {
                 </div>
 
                 <Modal isOpen={showModal} onClose={handleCloseModal}>
+                    <h1 className='text-center mt-4 mb-4'>Notifikasi</h1>
                     <h2 className="text-lg mb-4 text-center">{modalMessage}</h2>
                     <div className="flex justify-center mt-4">
                         <button
                             onClick={handleCloseModal}
-                            className="px-6 py-2 bg-blue-500 text-white rounded-md"
+                            className="px-6 py-2 bg-custom-navy text-white rounded-md hover:bg-white hover:text-custom-navy border border-custom-navy duration-300 ease-in-out"
                         >
                             Tutup
                         </button>

@@ -33,7 +33,6 @@ const Footer = () => {
             <a href="#" className="block mb-2 hover:text-secondary ">NAVIGATION</a>
             <a href="#" className="block mb-2 hover:text-secondary font-mono">Beranda</a>
             <a href="#" className="block mb-2 hover:text-secondary font-mono">Tentang</a>
-            <a href="#" className="block mb-2 hover:text-secondary font-mono">Kontak</a>
           </div>
         </div>
       </div>

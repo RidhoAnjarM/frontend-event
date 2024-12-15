@@ -205,19 +205,24 @@ const LandingPage = () => {
                 <Slider />
             </div>
 
-            <div className="flex mb-8 w-[1000px] h-[100px] rounded-[20px] bg-custom-navy mx-auto z-10 relative -top-16 items-center justify-between px-[60px]">
+            <div className="flex mb-8 w-[900px] h-[100px] rounded-[20px] bg-custom-navy mx-auto z-10 relative -top-16 items-center justify-between px-[40px]">
                 <div className="relative z-10" ref={categoryRef}>
                     <button
                         onClick={handleCategoryToggle}
                         className="h-[40px] w-[250px] text-center text-[15px] rounded-[5px] bg-custom-grey text-custom-navy font-sans"
                     >
-                        {filters.category || "Select Category"}
+                        <div className="absolute top-1/2 right-2 transform -translate-y-1/2 pointer-events-none text-gray-700 z-20">
+                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
+                        </div>
+                        {filters.category || "Cari Kategori"}
                     </button>
                     {isCategoryOpen && (
                         <div className="absolute left-0 right-0 max-h-60 overflow-hidden bg-white border mt-1 text-custom-navy font-sans    ">
                             <input
                                 type="text"
-                                placeholder="Search Categories"
+                                placeholder="Cari kategori..."
                                 className="border p-2 rounded w-full mb-2 sticky top-0 z-10"
                                 onChange={(e) => setFilters({ ...filters, category: e.target.value })}
                                 value={filters.category}
@@ -246,17 +251,25 @@ const LandingPage = () => {
                         onClick={handleLocationToggle}
                         className="h-[40px] w-[250px] text-center rounded-[5px] text-[15px] bg-custom-grey text-custom-navy font-sans"
                     >
-                        {filters.location || "Select Location"}
+                        <div className="absolute top-1/2 right-2 transform -translate-y-1/2 pointer-events-none text-gray-700 z-20">
+                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                            </svg>
+                        </div>
+                        {filters.location || "Cari Acara"}
                     </button>
                     {isLocationOpen && (
                         <div className="absolute left-0 right-0 max-h-60 overflow-hidden bg-white border mt-1 text-custom-navy font-sans">
-                            <input
-                                type="text"
-                                placeholder="Search Locations"
-                                className="border p-2 rounded w-full mb-2 sticky top-0 z-10"
-                                onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                                value={filters.location}
-                            />
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Cari acara..."
+                                    className="border p-2 rounded w-full mb-2 sticky top-0 z-10 pr-8"
+                                    onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                                    value={filters.location}
+                                />
+
+                            </div>
                             <ul className="overflow-y-auto max-h-40">
                                 {locations
                                     .filter((loc) =>
@@ -279,16 +292,22 @@ const LandingPage = () => {
                 <input
                     type="text"
                     name="name"
-                    placeholder="Search..."
+                    placeholder="Cari acara..."
                     value={filters.name}
                     onChange={handleFilterChange}
-                    className="h-[40px] w-[250px] px-[40px] text-custom-navy outline-none rounded-[5px] z-10 bg-custom-grey font-sans"
+                    autoComplete='off'
+                    className="h-[40px] w-[250px] px-[20px] text-custom-navy outline-none rounded-[5px] z-10 bg-custom-grey font-sans flex items-center"
                 />
+                <div className="absolute inset-y-0 right-14 z-20 flex items-center pr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
             </div>
 
             <div className="mt-[50px] px-[120px]">
                 <div className="w-full flex items-center justify-between mb-20">
-                    <h1 className="text-4xl font-bold ">
+                    <h1 className="text-4xl font-russo">
                         Acara <span className="text-custom-purple">Mendatang</span>
                     </h1>
                     <div className="flex gap-4 mb-6">
@@ -384,7 +403,7 @@ const LandingPage = () => {
             <hr className='border border-custom-navy w-[1200px] mx-auto rounded-full mt-5' />
 
             <div className="px-[120px] mt-20">
-                <h1 className="text-4xl font-bold mb-12">Acara <span className='text-custom-purple'>Populer</span></h1>
+                <h1 className="text-4xl  mb-12 font-russo">Acara <span className='text-custom-purple'>Populer</span></h1>
                 <div className="relative">
                     <button
                         onClick={scrollLeft}
@@ -405,9 +424,23 @@ const LandingPage = () => {
                                     <div className="w-4 h-4 rounded-full bg-custom-purple-light animate-bounce [animation-delay:.7s]"></div>
                                 </div>
                             </div>
-                        ) : popularEvents.filter((event) => event.status !== "ended").length > 0 ? (
+                        ) : popularEvents.filter((event) => {
+                            const now = new Date();
+                            const eventStart = new Date(event.date_start);
+                            const eventEnd = new Date(event.date_end || event.date_start);
+                            
+                            return (eventStart > now) || // upcoming
+                                   (eventStart <= now && eventEnd >= now); // ongoing
+                        }).length > 0 ? (
                             popularEvents
-                                .filter((event) => event.status !== "ended")
+                                .filter((event) => {
+                                    const now = new Date();
+                                    const eventStart = new Date(event.date_start);
+                                    const eventEnd = new Date(event.date_end || event.date_start);
+                                    
+                                    return (eventStart > now) || // upcoming
+                                           (eventStart <= now && eventEnd >= now); // ongoing
+                                })
                                 .map((event) => (
                                     <div key={event.id} className="flex-shrink-0 w-80">
                                         <EventPopular eventpopular={event} />

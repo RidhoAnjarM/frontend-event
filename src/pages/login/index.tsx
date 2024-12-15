@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import Alert from '@/components/Alert';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -8,10 +9,22 @@ const Login = () => {
   const [error, setError] = useState('');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState<'success' | 'error' | 'warning' | 'info'>('error');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    if (!username || !password) {
+      setAlertType('warning');
+      setAlertMessage('Username dan password harus diisi');
+      setShowAlert(true);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         username,
@@ -22,13 +35,38 @@ const Login = () => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({ username: loggedUsername }));
 
-      if (role === 'user') {
-        router.push('/');
-      } else if (role === 'admin') {
-        router.push('/admin/dashboard');
+      setAlertType('success');
+      setAlertMessage('Login berhasil!');
+      setShowAlert(true);
+
+      setTimeout(() => {
+        if (role === 'user') {
+          router.push('/');
+        } else if (role === 'admin') {
+          router.push('/admin/dashboard');
+        }
+      }, 1500);
+
+    } catch (error: any) {
+      let errorMessage = 'Terjadi kesalahan saat login';
+      
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            errorMessage = 'Username atau password salah';
+            break;
+          case 404:
+            errorMessage = 'Username tidak ditemukan';
+            break;
+          case 500:
+            errorMessage = 'Terjadi kesalahan pada server';
+            break;
+        }
       }
-    } catch (error) {
-      setError('Login failed. username atau password salah');
+      
+      setAlertType('error');
+      setAlertMessage(errorMessage);
+      setShowAlert(true);
     } finally {
       setLoading(false);
     }
@@ -36,6 +74,14 @@ const Login = () => {
 
   return (
     <div>
+      {showAlert && (
+        <Alert 
+          type={alertType}
+          message={alertMessage}
+          onClose={() => setShowAlert(false)}
+        />
+      )}
+      
       <div className='w-full flex justify-between'>
         <div className="w-[840px] h-[750px] flex justify-center items-center">
           <div className="w-[578px] h-[640px]">

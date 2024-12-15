@@ -8,6 +8,21 @@ export type Location = {
     city: string;
 };
 
+export type Rating = {
+    id: number;
+    event_id: number;
+    user_id: number;
+    rating: number;
+}
+
+
+export type User = {
+    id: number;
+    username: string;
+    password: string;
+    role: string;
+};
+
 export interface Event {
     sessions: any;
     id: number;
@@ -131,3 +146,5 @@ export interface EventCardOther {
         unique_raters: number;
     };
 }
+
+export type AlertType = 'success' | 'error' | 'info' | 'warning';

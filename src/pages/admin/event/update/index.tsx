@@ -16,6 +16,7 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [capacity, setCapacity] = useState<number | ''>('');
+    const [remainingCapacity, setRemainingCapacity] = useState<number | ''>('');
     const [category, setCategory] = useState<string | number>('');
     const [location, setLocation] = useState<string | number>('');
     const [address, setAddress] = useState('');
@@ -63,11 +64,19 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
                 setDateStart(event.date_start || '');
                 setDateEnd(event.date_end || '');
                 if (event.time) {
-                    const [start, end] = event.time.split('-');
-                    setStartTime(start || '');
-                    setEndTime(end || '');
+                    const timeParts = event.time.split('-').map((t: string) => t.trim());
+                    if (timeParts.length === 2) {
+                        const formatTime = (time: string) => {
+                            return time.replace(/\s/g, '').padStart(5, '0');
+                        };
+                        
+                        setStartTime(formatTime(timeParts[0]));
+                        setEndTime(formatTime(timeParts[1]));
+                    }
                 }
+        
                 setCapacity(event.capacity || '');
+                setRemainingCapacity(event.remaining_capacity || '');
                 setCategory(event.category_id || '');
                 setLocation(event.location_id || '');
                 setAddress(event.address || '');
@@ -75,7 +84,17 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
                 setMode(event.mode || 'offline');
                 setLink(event.link || '');
                 setBenefits(event.benefits || '');
-                setSessions(event.sessions || [{ date: '', time: '', speaker: '', location: '' }]);
+                if (Array.isArray(event.sessions) && event.sessions.length > 0) {
+                    const formattedSessions = event.sessions.map((session: any) => ({
+                        date: session.date || '',
+                        time: session.time || '',
+                        speaker: session.speaker || '',
+                        location: session.location || ''
+                    }));
+                    setSessions(formattedSessions);
+                } else {
+                    setSessions([{ date: '', time: '', speaker: '', location: '' }]);
+                }
             } catch (err) {
                 console.error('Failed to fetch event details:', err);
             }
@@ -109,6 +128,7 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
         if (dateend) formData.append('dateend', dateend);
         formData.append('time', time);
         formData.append('capacity', capacity.toString());
+        formData.append('remaining_capacity', remainingCapacity.toString());
         formData.append('category_id', category.toString());
         formData.append('location_id', location.toString());
         formData.append('address', address);
@@ -117,7 +137,12 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
         formData.append('mode', mode);
         formData.append('link', link);
         formData.append('benefits', benefits);
-        formData.append('sessions', JSON.stringify(sessions));
+        sessions.forEach((session, index) => {
+            formData.append(`sessions[${index}][date]`, session.date);
+            formData.append(`sessions[${index}][time]`, session.time);
+            formData.append(`sessions[${index}][speaker]`, session.speaker);
+            formData.append(`sessions[${index}][location]`, session.location);
+        });
 
         try {
             await axios.put(`${API_URL}/event/${id}`, formData, {
@@ -125,10 +150,15 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            setSuccess('Event updated successfully!');
-            router.push('/admin/dashboard');
+            setSuccess('Acara Berhasil diupdate!');
+            setTimeout(() => {
+                router.push('/admin/dashboard');
+            }, 2000);
         } catch (err) {
-            setError('Failed to update event. Please try again.');
+            setError('Gagal mengupdate acara.');
+            setTimeout(() => {
+                router.push('/admin/dashboard');
+            }, 2000);
         }
     };
 
@@ -393,6 +423,20 @@ const UpdateEventForm = ({ eventId }: { eventId: string }) => {
                             </label>
                         </div>
                     </div>
+
+                    <div className="relative">
+                        <input
+                            type="number"
+                            value={remainingCapacity}
+                            onChange={(e) => setRemainingCapacity(Number(e.target.value))}
+                            className="peer h-[46px] w-[200px] rounded-[5px] text-black outline-none px-5 font-sans"
+                            required
+                        />
+                        <label className="absolute text-black top-1/2 translate-y-[-50%] left-4 px-2 peer-focus:-top-2 peer-focus:left-3 font-light peer-focus:text-sm peer-focus:text-black peer-valid:-top-0 peer-valid:left-3 peer-valid:text-[13px] peer-valid:text-black duration-150">
+                            Remaining Capacity
+                        </label>
+                    </div>
+
 
                     <div className="w-full h-[46px] relative flex mb-5 mt-7">
                         <input

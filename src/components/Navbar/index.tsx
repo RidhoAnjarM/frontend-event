@@ -7,26 +7,30 @@ const Navbar = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false); 
+  const [isScrolled, setIsScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      setIsLoggedIn(true);
-      setUsername(user.username);
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        setIsLoggedIn(true);
+        setUsername(user.username);
+      }
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    setUsername(null);
-    router.push("/login");
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setIsLoggedIn(false);
+      setUsername(null);
+      router.push("/login");
+    }
   };
 
   const handleAccount = () => {
@@ -87,7 +91,7 @@ const Navbar = () => {
   return (
     <nav>
       <div
-        className={`w-full h-[113px] flex items-center justify-between px-[120px] fixed top-0 bg-custom-grey z-40 bg-opacity-70 backdrop-blur-sm transition-shadow duration-300 ${isScrolled ? "shadow-md" : ""
+        className={`w-full h-[113px] flex items-center justify-between font-russo px-[120px] fixed top-0 bg-custom-grey z-40 bg-opacity-70 backdrop-blur-sm transition-shadow duration-300 ${isScrolled ? "shadow-md" : ""
           }`}
       >
         <div className="w-[100px]">
@@ -104,20 +108,13 @@ const Navbar = () => {
             Beranda
           </button>
           <button
-            onClick={() => router.push("#")}
-            className={`m-7 ${router.pathname === "#"
+            onClick={() => router.push("/tentang")}
+            className={`m-7 ${router.pathname === "/tentang"
               ? "border-b-[4px] border-custom-navy"
               : ""
               }`}
           >
             Tentang
-          </button>
-          <button
-            onClick={() => router.push("#")}
-            className={`m-7 ${router.pathname === "#" ? "border-b-[4px] border-custom-navy" : ""
-              }`}
-          >
-            Kontak
           </button>
         </div>
         <div>

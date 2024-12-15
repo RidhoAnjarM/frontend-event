@@ -19,7 +19,7 @@ const config: Config = {
         'custom-grey': '#ECECEC',
       },
       fontFamily: {
-        russo: ['Russo One'],
+        'russo': ['Russo One', 'sans-serif'],
       },
       boxShadow: {
         'custom': '0 0 15px rgba(0, 0, 0, 100)',

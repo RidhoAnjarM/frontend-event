@@ -64,37 +64,55 @@ const Navmin = () => {
                     <img src="../images/logo.png" alt="logo" />
                 </div>
                 <hr className="mb-[15px] mt-[15px] border border-custom-navy w-[120px] mx-auto rounded-full" />
-                <div className="mt-[120px]">
-                    <button
-                        onClick={() => router.push("/admin/dashboard")}
-                        className={` w-[130px] h-[55px] hover:bg-gray-200 rounded-e-full duration-300 ease-in-out hover:text-custom-navy border-custom-navy border-2 mb-[30px]  ${router.pathname === "/admin/dashboard"
-                            ? "border rounded-e-full bg-custom-navy text-white "
-                            : ""
+                <div className="mt-[150px] relative">
+                    <div 
+                        className="absolute w-[130px] h-[55px] bg-custom-navy rounded-e-full transition-all ease-in-out duration-500"
+                        style={{
+                            top: router.pathname === "/admin/dashboard" ? "0" :
+                                 router.pathname === "/admin/user" ? "55px" :
+                                 router.pathname === "/admin/kategori" ? "110px" :
+                                 router.pathname === "/admin/lokasi" ? "165px" : "0"
+                        }}
+                    />
+                    <div className="flex flex-col space-y-0">
+                        <button
+                            onClick={() => router.push("/admin/dashboard")}
+                            className={`relative z-10 w-[130px] h-[55px] rounded-e-full transition-all ease-in-out duration-500 ${
+                                router.pathname === "/admin/dashboard" ? "text-white" : "text-custom-navy hover:bg-gray-100"
                             }`}
-                    >
-                        Beranda
-                    </button>
-                    <button
-                        onClick={() => router.push("/admin/kategori")}
-                        className={`w-[130px] h-[55px] hover:bg-gray-200 rounded-e-full duration-300 ease-in-out hover:text-custom-navy border-custom-navy border-2 mb-[30px] ${router.pathname === "/admin/kategori"
-                            ? "border rounded-e-full bg-custom-navy text-white"
-                            : ""
+                        >
+                            Beranda
+                        </button>
+                        <button
+                            onClick={() => router.push("/admin/user")}
+                            className={`relative z-10 w-[130px] h-[55px] rounded-e-full transition-all ease-in-out duration-500 ${
+                                router.pathname === "/admin/user" ? "text-white" : "text-custom-navy hover:bg-gray-100"
                             }`}
-                    >
-                        Kategori
-                    </button>
-                    <button
-                        onClick={() => router.push("/admin/lokasi")}
-                        className={`w-[130px] h-[55px] hover:bg-gray-200 rounded-e-full duration-300 ease-in-out hover:text-custom-navy border-custom-navy border-2 mb-[30px] ${router.pathname === "/admin/lokasi" ? "border rounded-e-full bg-custom-navy text-white" : ""
+                        >
+                            User
+                        </button>
+                        <button
+                            onClick={() => router.push("/admin/kategori")}
+                            className={`relative z-10 w-[130px] h-[55px] rounded-e-full transition-all ease-in-out duration-500 ${
+                                router.pathname === "/admin/kategori" ? "text-white" : "text-custom-navy hover:bg-gray-100"
                             }`}
-                    >
-                        Lokasi
-                    </button>
+                        >
+                            Kategori
+                        </button>
+                        <button
+                            onClick={() => router.push("/admin/lokasi")}
+                            className={`relative z-10 w-[130px] h-[55px] rounded-e-full transition-all ease-in-out duration-500 ${
+                                router.pathname === "/admin/lokasi" ? "text-white" : "text-custom-navy hover:bg-gray-100"
+                            }`}
+                        >
+                            Lokasi
+                        </button>
+                    </div>
                     <button
                         onClick={handleConfirmLogout}
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-200 w-full text-center mt-[150px]"
+                        className="px-4 py-2 text-gray-700 hover:bg-gray-200 w-full mt-[150px] flex items-center justify-center"
                     >
-                        Logout
+                        <img src="../icons/logout.svg" alt="" />
                     </button>
                 </div>
             </div>
